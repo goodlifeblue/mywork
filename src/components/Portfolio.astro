@@ -144,28 +144,30 @@ const imageCategories = [
               </div>
             ))}
           </div>
+          {cat.id === 'web' && (
+            <>
+              <div id="figma">
+                <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 py-4">
+                  <div class="flex items-center gap-3">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">🎛️</span>
+                    <div>
+                      <h3 class="text-xl font-bold text-slate-900">Figma</h3>
+                      <p class="text-sm font-medium uppercase tracking-wide text-brand-500">Prototype / Design</p>
+                    </div>
+                  </div>
+                  <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <FigmaEmbed compact url="https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&embed-host=share" height={450} />
+                  <FigmaEmbed compact url="https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&embed-host=share" height={450} />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       ))
     }
-
-    <!-- Figma 類別 -->
-    <div id="figma">
-      <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">🎛️</span>
-          <div>
-            <h3 class="text-xl font-bold text-slate-900">Figma</h3>
-            <p class="text-sm font-medium uppercase tracking-wide text-brand-500">Prototype / Design</p>
-          </div>
-        </div>
-        <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
-      </div>
-
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <FigmaEmbed compact url="https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&embed-host=share" height={450} />
-        <FigmaEmbed compact url="https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&embed-host=share" height={450} />
-      </div>
-    </div>
 
     <!-- 影片類別 -->
     <div id="video">

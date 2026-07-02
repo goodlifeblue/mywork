@@ -21,3 +21,9 @@ pnpm-debug.log*
 
 # 原始素材（未壓縮）—— 網站實際使用 public/ 內的壓縮版，原始檔僅本機保留備份
 image/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
