@@ -1,0 +1,23 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-generated files
+.DS_Store
+
+# 原始素材（未壓縮）—— 網站實際使用 public/ 內的壓縮版，原始檔僅本機保留備份
+image/

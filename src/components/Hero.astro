@@ -1,0 +1,125 @@
+---
+// 個人介紹區
+const roles = ["Senior Product Designer", "Design Lead", "UI/UX Designer"];
+const meta = [
+  { icon: "📍", label: "台中市" },
+  { icon: "📧", label: "goodlife.blue@gmail.com", href: "mailto:goodlife.blue@gmail.com" },
+];
+---
+
+<section
+  id="about"
+  class="relative overflow-hidden bg-gradient-to-b from-brand-50 to-white"
+>
+  <!-- 裝飾光暈 -->
+  <div
+    class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-200/50 blur-3xl"
+  >
+  </div>
+
+  <div class="mx-auto max-w-5xl px-6 py-24 sm:py-32">
+    <div class="fade-up grid items-center gap-12 lg:grid-cols-[1fr_auto]">
+      <!-- 文字 -->
+      <div class="flex flex-col items-start gap-6">
+        <span
+          class="rounded-full bg-brand-100 px-4 py-1.5 text-sm font-medium text-brand-700"
+        >
+          👋 10+ 年產品設計經驗
+        </span>
+
+        <h1
+          class="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-6xl"
+        >
+          我是 <span class="text-brand-600">藍怡婷</span>
+        </h1>
+
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-lg font-medium text-slate-500">
+          {
+            roles.map((role, i) => (
+              <>
+                {i > 0 && <span class="text-brand-300">·</span>}
+                <span>{role}</span>
+              </>
+            ))
+          }
+        </p>
+
+        <p class="max-w-2xl text-lg leading-relaxed text-slate-600">
+          專精於大型平台產品、後台管理系統及 Web／Mobile 產品設計，熟悉從需求分析、
+          資訊架構、使用流程規劃、UI／UX 設計、Design System 建置到開發協作的完整流程。
+          擅長將商業需求轉化為優質的使用者體驗。
+        </p>
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
+          {
+            meta.map((m) =>
+              m.href ? (
+                <a href={m.href} class="flex items-center gap-1.5 transition-colors hover:text-brand-600">
+                  <span>{m.icon}</span>
+                  {m.label}
+                </a>
+              ) : (
+                <span class="flex items-center gap-1.5">
+                  <span>{m.icon}</span>
+                  {m.label}
+                </span>
+              )
+            )
+          }
+        </div>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a
+            href="#portfolio"
+            class="rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md"
+          >
+            查看作品集
+          </a>
+          <a
+            href="#experience"
+            class="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600"
+          >
+            查看經歷
+          </a>
+          <a
+            href="#contact"
+            class="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-brand-300 hover:text-brand-600"
+          >
+            聯絡我
+          </a>
+        </div>
+
+        <!-- 專長標籤 -->
+        <div class="flex flex-wrap gap-2 pt-6">
+          {
+            ["產品規劃", "UI／UX 設計", "Design System", "設計團隊管理", "Figma", "Motion Design"].map(
+              (tag) => (
+                <span class="rounded-md bg-white px-3 py-1 text-sm text-slate-500 shadow-sm ring-1 ring-slate-100">
+                  {tag}
+                </span>
+              )
+            )
+          }
+        </div>
+      </div>
+
+      <!-- 照片 -->
+      <div class="order-first flex justify-center lg:order-last">
+        <div class="relative">
+          <!-- 綠色外圈點綴 -->
+          <div
+            class="absolute -inset-2 rounded-full bg-gradient-to-br from-brand-300 to-brand-100"
+          >
+          </div>
+          <img
+            src="/me.jpg"
+            alt="藍怡婷 Yiting Lan"
+            width="200"
+            height="200"
+            class="relative h-[200px] w-[200px] rounded-full object-cover object-top shadow-xl ring-4 ring-white"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

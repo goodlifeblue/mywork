@@ -1,0 +1,94 @@
+---
+// 工作經歷
+const groups = [
+  {
+    title: "團隊管理",
+    items: [
+      "帶領 3～4 人設計團隊，負責工作分配、專案規劃、設計品質管理及時程控管。",
+      "建立 Design SOP、設計規範及協作流程，提升團隊工作效率。",
+      "指導設計師並協助建立一致性的設計標準。",
+    ],
+  },
+  {
+    title: "產品設計與規劃",
+    items: [
+      "主導大型平台產品及後台管理系統之產品規劃與 UI／UX 設計。",
+      "負責需求分析、資訊架構（IA）、User Flow、Wireframe、Prototype 及高擬真介面設計。",
+      "與 PM、RD、QA、營運及行銷團隊合作，規劃產品功能並推動專案執行。",
+      "參與產品需求討論、版本規劃、設計驗收及產品迭代。",
+    ],
+  },
+  {
+    title: "UI／UX 設計",
+    items: [
+      "規劃 Web 與 Mobile 產品介面。",
+      "建立 Design System、Component Library 與 UI Design Guideline。",
+      "優化使用流程、介面一致性及產品操作體驗。",
+      "規劃元件化設計，提高設計與開發協作效率。",
+    ],
+  },
+  {
+    title: "大型專案",
+    items: [
+      "主導大型平台產品專案設計。",
+      "規劃大型後台管理系統介面與操作流程。",
+      "建立元件化設計流程，提升設計一致性。",
+      "參與產品版本迭代，確保專案品質與交付時程。",
+    ],
+  },
+  {
+    title: "Motion Design",
+    items: [
+      "製作產品展示影片及操作教學影片。",
+      "使用 Adobe After Effects 製作 UI Motion、Motion Graphics 與產品動畫。",
+      "使用 Adobe Premiere Pro 完成影片剪輯、字幕及影音後製。",
+    ],
+  },
+];
+---
+
+<section id="experience" class="mx-auto max-w-5xl px-6 py-24">
+  <div class="mb-12 flex flex-col gap-3">
+    <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">
+      Experience
+    </span>
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+      工作經歷
+    </h2>
+  </div>
+
+  <div class="relative border-l-2 border-brand-100 pl-8">
+    <!-- 時間點 -->
+    <span
+      class="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-4 border-white bg-brand-500 shadow"
+    ></span>
+
+    <div class="mb-8 flex flex-col gap-1">
+      <h3 class="text-xl font-bold text-slate-900">
+        資深產品設計師｜Design Lead
+      </h3>
+      <p class="text-sm font-medium text-brand-600">2019／08 － 2026／05</p>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      {
+        groups.map((group) => (
+          <div class="rounded-2xl border border-slate-100 bg-white p-6 transition-all hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
+            <h4 class="mb-3 flex items-center gap-2 text-base font-semibold text-slate-900">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-brand-500" />
+              {group.title}
+            </h4>
+            <ul class="flex flex-col gap-2">
+              {group.items.map((item) => (
+                <li class="flex gap-2 text-sm leading-relaxed text-slate-600">
+                  <span class="mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-brand-300" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

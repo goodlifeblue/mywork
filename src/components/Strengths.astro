@@ -1,0 +1,73 @@
+---
+// 核心能力 + 個人特色
+const competencies = [
+  "大型平台產品設計",
+  "後台管理系統設計",
+  "Design System 建置",
+  "Design SOP 建立",
+  "產品規劃與需求分析",
+  "UI／UX 設計",
+  "Web／Mobile 產品設計",
+  "使用者體驗優化",
+  "跨部門溝通協作",
+  "專案管理",
+  "設計團隊管理",
+  "版本迭代規劃",
+];
+
+const traits = [
+  "具產品思維，能平衡商業需求與使用者體驗。",
+  "熟悉設計到開發流程，能有效與 PM、工程及 QA 協作。",
+  "擅長建立設計規範與元件化管理，提高團隊產能與設計品質。",
+  "樂於學習新技術，積極運用 AI 工具提升設計效率與工作流程。",
+];
+---
+
+<section id="strengths" class="mx-auto max-w-5xl px-6 py-24">
+  <div class="grid gap-12 lg:grid-cols-2">
+    <!-- 核心能力 -->
+    <div>
+      <div class="mb-8 flex flex-col gap-3">
+        <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">
+          Core
+        </span>
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          核心能力
+        </h2>
+      </div>
+      <div class="flex flex-wrap gap-2.5">
+        {
+          competencies.map((c) => (
+            <span class="rounded-full border border-brand-100 bg-brand-50 px-4 py-2 text-sm font-medium text-brand-700">
+              {c}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 個人特色 -->
+    <div>
+      <div class="mb-8 flex flex-col gap-3">
+        <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">
+          About Me
+        </span>
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          個人特色
+        </h2>
+      </div>
+      <ul class="flex flex-col gap-4">
+        {
+          traits.map((t) => (
+            <li class="flex gap-3 rounded-xl border border-slate-100 bg-white p-4">
+              <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm text-brand-600">
+                ✓
+              </span>
+              <span class="text-sm leading-relaxed text-slate-600">{t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

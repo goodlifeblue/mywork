@@ -1,0 +1,48 @@
+---
+const contacts = [
+  { label: "Email", value: "goodlife.blue@gmail.com", href: "mailto:goodlife.blue@gmail.com" },
+  { label: "地點", value: "台中市", href: null },
+];
+---
+
+<section id="contact" class="border-t border-slate-100 bg-brand-50">
+  <div class="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center">
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+      一起合作吧！
+    </h2>
+    <p class="max-w-xl text-slate-600">
+      對我的作品有興趣，或想聊聊產品設計、設計團隊合作的機會嗎？歡迎與我聯絡。
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-slate-600">
+      {
+        contacts.map((c) =>
+          c.href ? (
+            <a href={c.href} class="flex items-center gap-1.5 font-medium transition-colors hover:text-brand-600">
+              <span class="text-slate-400">{c.label}</span>
+              {c.value}
+            </a>
+          ) : (
+            <span class="flex items-center gap-1.5 font-medium">
+              <span class="text-slate-400">{c.label}</span>
+              {c.value}
+            </span>
+          )
+        )
+      }
+    </div>
+
+    <a
+      href="mailto:goodlife.blue@gmail.com"
+      class="rounded-full bg-brand-600 px-8 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md"
+    >
+      寄信給我
+    </a>
+  </div>
+
+  <footer class="border-t border-brand-100">
+    <div class="mx-auto max-w-5xl px-6 py-8 text-center text-sm text-slate-500">
+      <p>© {new Date().getFullYear()} 藍怡婷 Yiting Lan. All rights reserved.</p>
+    </div>
+  </footer>
+</section>

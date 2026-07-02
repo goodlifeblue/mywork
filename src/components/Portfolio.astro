@@ -1,0 +1,263 @@
+---
+// 作品集 —— 三大分類
+// 之後把圖片放進 public/works/，再把每個 item 的 image 換成路徑即可（例如 "/works/web-01.jpg"）
+const categories = [
+  {
+    id: "web",
+    icon: "🌐",
+    title: "網頁設計",
+    subtitle: "Web Design",
+    desc: "Web／Mobile 產品與品牌官網介面設計，注重 RWD 與使用體驗。",
+    items: [
+      { title: "UP Online Games 娛樂城", tag: "官網", image: "/works/web01.jpg" },
+      { title: "作品名稱", tag: "RWD", image: null },
+      { title: "作品名稱", tag: "Landing Page", image: null },
+    ],
+  },
+  {
+    id: "admin",
+    icon: "🗂️",
+    title: "後台設計",
+    subtitle: "Admin / Dashboard",
+    desc: "大型平台後台管理系統，強調資訊架構、操作流程與元件化設計。",
+    items: [
+      { title: "作品名稱", tag: "Dashboard", image: null },
+      { title: "作品名稱", tag: "後台系統", image: null },
+      { title: "作品名稱", tag: "Design System", image: null },
+    ],
+  },
+  {
+    id: "media",
+    icon: "🎬",
+    title: "影片 / Banner / Logo",
+    subtitle: "Motion / Graphic",
+    desc: "產品展示影片、UI Motion、行銷 Banner 與品牌識別設計。",
+    items: [
+      { title: "產品展示影片", tag: "產品影片", video: "/videos/video01.mp4", poster: "/videos/video01.jpg", image: null },
+      { title: "UI Motion", tag: "Motion", video: "/videos/video02.mp4", poster: "/videos/video02.jpg", image: null },
+      { title: "作品名稱", tag: "Logo", video: null, poster: null, image: null },
+    ],
+  },
+];
+---
+
+<section id="portfolio" class="mx-auto max-w-5xl px-6 py-24">
+  <div class="mb-16 flex flex-col gap-3">
+    <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">
+      Portfolio
+    </span>
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+      作品集
+    </h2>
+    <p class="max-w-2xl text-slate-600">
+      精選作品分為三大類別，涵蓋網頁、後台系統與影音／視覺設計。
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-20">
+    {
+      categories.map((cat) => (
+        <div id={cat.id}>
+          <!-- 分類標題 -->
+          <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-3">
+              <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">
+                {cat.icon}
+              </span>
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">{cat.title}</h3>
+                <p class="text-sm font-medium uppercase tracking-wide text-brand-500">
+                  {cat.subtitle}
+                </p>
+              </div>
+            </div>
+            <p class="max-w-md text-sm text-slate-500">{cat.desc}</p>
+          </div>
+
+          <!-- 作品卡片 -->
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {cat.items.map((item) => (
+              <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
+                <div class="flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
+                  {item.video ? (
+                    <button
+                      type="button"
+                      class="video-trigger group/vid relative block h-full w-full cursor-pointer"
+                      data-video={item.video}
+                      aria-label={`播放 ${item.title}`}
+                    >
+                      <img
+                        src={item.poster}
+                        alt={item.title}
+                        loading="lazy"
+                        class="h-full w-full bg-slate-900 object-cover transition-transform duration-300 group-hover/vid:scale-105"
+                      />
+                      {/* 播放 / 放大 遮罩 */}
+                      <span class="absolute inset-0 flex items-center justify-center bg-slate-900/25 transition-colors group-hover/vid:bg-slate-900/40">
+                        <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-brand-600 shadow-lg transition-transform group-hover/vid:scale-110">
+                          <svg viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 h-6 w-6">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </span>
+                      </span>
+                      <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
+                        ⛶ 點擊放大
+                      </span>
+                    </button>
+                  ) : item.image ? (
+                    <button
+                      type="button"
+                      class="image-trigger group/img relative block h-full w-full cursor-pointer"
+                      data-image={item.image}
+                      aria-label={`放大檢視 ${item.title}`}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        class="h-full w-full object-cover object-top transition-transform duration-500 group-hover/img:object-bottom"
+                      />
+                      <span class="absolute inset-0 bg-slate-900/0 transition-colors group-hover/img:bg-slate-900/20" />
+                      <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
+                        ⛶ 點擊放大
+                      </span>
+                    </button>
+                  ) : (
+                    <span class="text-4xl opacity-40">🖼️</span>
+                  )}
+                </div>
+                <div class="flex items-center justify-between gap-2 p-4">
+                  <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
+                    {item.title}
+                  </h4>
+                  <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                    {item.tag}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<!-- 圖片燈箱 Lightbox（整頁截圖可捲動）-->
+<div
+  id="image-lightbox"
+  class="fixed inset-0 z-[100] hidden overflow-y-auto bg-slate-900/85 p-4 backdrop-blur-sm sm:p-8"
+>
+  <button
+    id="image-lightbox-close"
+    type="button"
+    aria-label="關閉"
+    class="fixed right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors hover:bg-white/20"
+  >
+    ✕
+  </button>
+  <img
+    id="image-lightbox-img"
+    src=""
+    alt=""
+    class="mx-auto w-full max-w-3xl rounded-xl shadow-2xl"
+  />
+</div>
+
+<!-- 影片燈箱 Lightbox -->
+<div
+  id="video-lightbox"
+  class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm"
+>
+  <button
+    id="video-lightbox-close"
+    type="button"
+    aria-label="關閉"
+    class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors hover:bg-white/20"
+  >
+    ✕
+  </button>
+  <video
+    id="video-lightbox-player"
+    controls
+    playsinline
+    class="max-h-[85vh] w-full max-w-4xl rounded-2xl bg-black shadow-2xl"
+  >
+  </video>
+</div>
+
+<script>
+  const lightbox = document.getElementById("video-lightbox");
+  const player = document.getElementById("video-lightbox-player") as HTMLVideoElement | null;
+  const closeBtn = document.getElementById("video-lightbox-close");
+
+  function openLightbox(src: string) {
+    if (!lightbox || !player) return;
+    player.src = src;
+    lightbox.classList.remove("hidden");
+    lightbox.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    player.play().catch(() => {});
+  }
+
+  function closeLightbox() {
+    if (!lightbox || !player) return;
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+    lightbox.classList.add("hidden");
+    lightbox.classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".video-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-video");
+      if (src) openLightbox(src);
+    });
+  });
+
+  closeBtn?.addEventListener("click", closeLightbox);
+  lightbox?.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // 圖片燈箱
+  const imgLightbox = document.getElementById("image-lightbox");
+  const imgEl = document.getElementById("image-lightbox-img") as HTMLImageElement | null;
+  const imgCloseBtn = document.getElementById("image-lightbox-close");
+
+  function openImageLightbox(src: string) {
+    if (!imgLightbox || !imgEl) return;
+    imgEl.src = src;
+    imgLightbox.scrollTop = 0;
+    imgLightbox.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeImageLightbox() {
+    if (!imgLightbox || !imgEl) return;
+    imgEl.removeAttribute("src");
+    imgLightbox.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".image-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-image");
+      if (src) openImageLightbox(src);
+    });
+  });
+
+  imgCloseBtn?.addEventListener("click", closeImageLightbox);
+  imgLightbox?.addEventListener("click", (e) => {
+    if (e.target === imgLightbox) closeImageLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeLightbox();
+      closeImageLightbox();
+    }
+  });
+</script>
