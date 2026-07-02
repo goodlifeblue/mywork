@@ -1,42 +1,67 @@
 ---
-// 作品集 —— 三大分類
-// 之後把圖片放進 public/works/，再把每個 item 的 image 換成路徑即可（例如 "/works/web-01.jpg"）
-const categories = [
+import { Image } from "astro:assets";
+
+// 自動抓取 src/assets/works/ 底下三個資料夾的所有檔案
+// 之後只要把新檔案丟進對應資料夾，作品集就會自動顯示，不需修改程式碼。
+const toSorted = (mods) =>
+  Object.entries(mods)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([path, src]) => ({
+      name: path.split("/").pop().replace(/\.[^.]+$/, ""),
+      src,
+    }));
+
+const webImages = toSorted(
+  import.meta.glob("../assets/works/web/*.{jpg,jpeg,png,webp}", {
+    eager: true,
+    import: "default",
+  })
+);
+const logoImages = toSorted(
+  import.meta.glob("../assets/works/logo/*.{jpg,jpeg,png,webp,svg}", {
+    eager: true,
+    import: "default",
+  })
+);
+const videoFiles = toSorted(
+  import.meta.glob("../assets/works/video/*.mp4", {
+    eager: true,
+    import: "default",
+    query: "?url",
+  })
+);
+const posterFiles = toSorted(
+  import.meta.glob("../assets/works/video/*.{jpg,jpeg,png}", {
+    eager: true,
+    import: "default",
+  })
+);
+
+// 影片與縮圖依檔名對應（video01.mp4 ↔ video01.jpg）
+const videos = videoFiles.map((v, i) => ({
+  ...v,
+  poster: posterFiles[i]?.src,
+}));
+
+// 圖片類別（網頁、Logo）
+const imageCategories = [
   {
     id: "web",
     icon: "🌐",
     title: "網頁設計",
     subtitle: "Web Design",
     desc: "Web／Mobile 產品與品牌官網介面設計，注重 RWD 與使用體驗。",
-    items: [
-      { title: "UP Online Games 娛樂城", tag: "官網", image: "/works/web01.jpg" },
-      { title: "作品名稱", tag: "RWD", image: null },
-      { title: "作品名稱", tag: "Landing Page", image: null },
-    ],
+    items: webImages,
+    fit: "cover", // 整頁截圖 → 裁切顯示頂部
   },
   {
-    id: "admin",
-    icon: "🗂️",
-    title: "後台設計",
-    subtitle: "Admin / Dashboard",
-    desc: "大型平台後台管理系統，強調資訊架構、操作流程與元件化設計。",
-    items: [
-      { title: "作品名稱", tag: "Dashboard", image: null },
-      { title: "作品名稱", tag: "後台系統", image: null },
-      { title: "作品名稱", tag: "Design System", image: null },
-    ],
-  },
-  {
-    id: "media",
-    icon: "🎬",
-    title: "影片 / Banner / Logo",
-    subtitle: "Motion / Graphic",
-    desc: "產品展示影片、UI Motion、行銷 Banner 與品牌識別設計。",
-    items: [
-      { title: "產品展示影片", tag: "產品影片", video: "/videos/video01.mp4", poster: "/videos/video01.jpg", image: null },
-      { title: "UI Motion", tag: "Motion", video: "/videos/video02.mp4", poster: "/videos/video02.jpg", image: null },
-      { title: "作品名稱", tag: "Logo", video: null, poster: null, image: null },
-    ],
+    id: "logo",
+    icon: "✏️",
+    title: "Logo 設計",
+    subtitle: "Logo / Branding",
+    desc: "品牌識別與 Logo 設計。",
+    items: logoImages,
+    fit: "contain", // Logo → 完整顯示不裁切
   },
 ];
 ---
@@ -50,15 +75,15 @@ const categories = [
       作品集
     </h2>
     <p class="max-w-2xl text-slate-600">
-      精選作品分為三大類別，涵蓋網頁、後台系統與影音／視覺設計。
+      精選作品分為網頁設計、Logo 設計與影片三大類別。
     </p>
   </div>
 
   <div class="flex flex-col gap-20">
+    <!-- 圖片類別（網頁、Logo）-->
     {
-      categories.map((cat) => (
+      imageCategories.map((cat) => (
         <div id={cat.id}>
-          <!-- 分類標題 -->
           <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
             <div class="flex items-center gap-3">
               <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">
@@ -74,64 +99,36 @@ const categories = [
             <p class="max-w-md text-sm text-slate-500">{cat.desc}</p>
           </div>
 
-          <!-- 作品卡片 -->
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {cat.items.map((item) => (
+            {cat.items.map((item, i) => (
               <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
-                <div class="flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
-                  {item.video ? (
-                    <button
-                      type="button"
-                      class="video-trigger group/vid relative block h-full w-full cursor-pointer"
-                      data-video={item.video}
-                      aria-label={`播放 ${item.title}`}
-                    >
-                      <img
-                        src={item.poster}
-                        alt={item.title}
-                        loading="lazy"
-                        class="h-full w-full bg-slate-900 object-cover transition-transform duration-300 group-hover/vid:scale-105"
-                      />
-                      {/* 播放 / 放大 遮罩 */}
-                      <span class="absolute inset-0 flex items-center justify-center bg-slate-900/25 transition-colors group-hover/vid:bg-slate-900/40">
-                        <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-brand-600 shadow-lg transition-transform group-hover/vid:scale-110">
-                          <svg viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 h-6 w-6">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                        </span>
-                      </span>
-                      <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
-                        ⛶ 點擊放大
-                      </span>
-                    </button>
-                  ) : item.image ? (
-                    <button
-                      type="button"
-                      class="image-trigger group/img relative block h-full w-full cursor-pointer"
-                      data-image={item.image}
-                      aria-label={`放大檢視 ${item.title}`}
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        loading="lazy"
-                        class="h-full w-full object-cover object-top transition-transform duration-500 group-hover/img:object-bottom"
-                      />
-                      <span class="absolute inset-0 bg-slate-900/0 transition-colors group-hover/img:bg-slate-900/20" />
-                      <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
-                        ⛶ 點擊放大
-                      </span>
-                    </button>
-                  ) : (
-                    <span class="text-4xl opacity-40">🖼️</span>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  class="image-trigger group/img relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100"
+                  data-image={item.src.src}
+                  aria-label={`放大檢視 ${cat.title} ${i + 1}`}
+                >
+                  <Image
+                    src={item.src}
+                    alt={`${cat.title} ${i + 1}`}
+                    loading="lazy"
+                    class={
+                      cat.fit === "contain"
+                        ? "h-full w-full object-contain p-4"
+                        : "h-full w-full object-cover object-top transition-transform duration-500 group-hover/img:object-bottom"
+                    }
+                  />
+                  <span class="absolute inset-0 bg-slate-900/0 transition-colors group-hover/img:bg-slate-900/20" />
+                  <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
+                    ⛶ 點擊放大
+                  </span>
+                </button>
                 <div class="flex items-center justify-between gap-2 p-4">
                   <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
-                    {item.title}
+                    {cat.title} {String(i + 1).padStart(2, "0")}
                   </h4>
                   <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
-                    {item.tag}
+                    {cat.subtitle}
                   </span>
                 </div>
               </div>
@@ -140,6 +137,68 @@ const categories = [
         </div>
       ))
     }
+
+    <!-- 影片類別 -->
+    <div id="video">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">
+            🎬
+          </span>
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">影片</h3>
+            <p class="text-sm font-medium uppercase tracking-wide text-brand-500">
+              Motion / Video
+            </p>
+          </div>
+        </div>
+        <p class="max-w-md text-sm text-slate-500">
+          產品展示影片、UI Motion 與 Motion Graphics。
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          videos.map((item, i) => (
+            <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
+              <button
+                type="button"
+                class="video-trigger group/vid relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-slate-900"
+                data-video={item.src}
+                aria-label={`播放影片 ${i + 1}`}
+              >
+                {item.poster && (
+                  <img
+                    src={item.poster.src}
+                    alt={`影片 ${i + 1}`}
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover/vid:scale-105"
+                  />
+                )}
+                <span class="absolute inset-0 flex items-center justify-center bg-slate-900/25 transition-colors group-hover/vid:bg-slate-900/40">
+                  <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-brand-600 shadow-lg transition-transform group-hover/vid:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 h-6 w-6">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
+                  ⛶ 點擊放大
+                </span>
+              </button>
+              <div class="flex items-center justify-between gap-2 p-4">
+                <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
+                  影片 {String(i + 1).padStart(2, "0")}
+                </h4>
+                <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                  Video
+                </span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
 
@@ -187,6 +246,7 @@ const categories = [
 </div>
 
 <script>
+  // 影片燈箱
   const lightbox = document.getElementById("video-lightbox");
   const player = document.getElementById("video-lightbox-player") as HTMLVideoElement | null;
   const closeBtn = document.getElementById("video-lightbox-close");
