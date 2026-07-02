@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import FigmaEmbed from "./FigmaEmbed.astro";
 
 // 自動抓取 src/assets/works/ 底下三個資料夾的所有檔案
 // 之後只要把新檔案丟進對應資料夾，作品集就會自動顯示，不需修改程式碼。
@@ -93,7 +94,7 @@ const imageCategories = [
               </span>
               <div>
                 <h3 class="text-xl font-bold text-slate-900">{cat.title}</h3>
-                <p class="text-sm font-medium uppercase tracking-wide text-brand-500">
+                <p class={cat.id === 'logo' ? 'hidden text-sm font-medium uppercase tracking-wide text-brand-500 sm:block' : 'text-sm font-medium uppercase tracking-wide text-brand-500'}>
                   {cat.subtitle}
                 </p>
               </div>
@@ -101,7 +102,7 @@ const imageCategories = [
             <p class="max-w-md text-sm text-slate-500">{cat.desc}</p>
           </div>
 
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class={cat.id === 'logo' ? 'grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3' : 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3'}>
             {cat.items.map((item, i) => (
               <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
                 {cat.zoomable ? (
@@ -146,6 +147,25 @@ const imageCategories = [
         </div>
       ))
     }
+
+    <!-- Figma 類別 -->
+    <div id="figma">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl">🎛️</span>
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">Figma</h3>
+            <p class="text-sm font-medium uppercase tracking-wide text-brand-500">Prototype / Design</p>
+          </div>
+        </div>
+        <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <FigmaEmbed compact url="https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&embed-host=share" height={450} />
+        <FigmaEmbed compact url="https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&embed-host=share" height={450} />
+      </div>
+    </div>
 
     <!-- 影片類別 -->
     <div id="video">
@@ -209,7 +229,102 @@ const imageCategories = [
       </div>
     </div>
   </div>
+
+  <div
+    id="portfolio-category-nav"
+    class="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:hidden"
+    style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
+  >
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-2 rounded-3xl border border-white/20 bg-brand-500/50 px-3 py-3 text-white shadow-2xl shadow-slate-900/10 backdrop-blur-sm">
+      <button
+        type="button"
+        data-target="web"
+        class="portfolio-nav-btn flex-1 rounded-2xl border border-transparent bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] transition-colors duration-200"
+        aria-pressed="false"
+      >
+        網頁設計
+      </button>
+      <button
+        type="button"
+        data-target="figma"
+        class="portfolio-nav-btn flex-1 rounded-2xl border border-transparent bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] transition-colors duration-200"
+        aria-pressed="false"
+      >
+        Figma
+      </button>
+      <button
+        type="button"
+        data-target="logo"
+        class="portfolio-nav-btn flex-1 rounded-2xl border border-transparent bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] transition-colors duration-200"
+        aria-pressed="false"
+      >
+        Logo
+      </button>
+      <button
+        type="button"
+        data-target="video"
+        class="portfolio-nav-btn flex-1 rounded-2xl border border-transparent bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] transition-colors duration-200"
+        aria-pressed="false"
+      >
+        影片
+      </button>
+    </div>
+  </div>
 </section>
+<script>
+  const portfolioNav = document.getElementById('portfolio-category-nav');
+  const portfolioSection = document.getElementById('portfolio');
+  const portfolioButtons = document.querySelectorAll('.portfolio-nav-btn');
+
+  function updateNavState(activeId) {
+    portfolioButtons.forEach((btn) => {
+      const isActive = btn.dataset.target === activeId;
+      btn.classList.toggle('border-white/80', isActive);
+      btn.classList.toggle('bg-white/20', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  function showPortfolioNav() {
+    if (!portfolioNav) return;
+    portfolioNav.classList.remove('hidden');
+  }
+
+  function hidePortfolioNav() {
+    if (!portfolioNav) return;
+    portfolioNav.classList.add('hidden');
+  }
+
+  if (portfolioSection && portfolioNav) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          showPortfolioNav();
+        } else {
+          hidePortfolioNav();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(portfolioSection);
+
+    portfolioButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateNavState(targetId);
+      });
+    });
+
+    updateNavState('web');
+  }
+</script>
 
 <!-- 圖片燈箱 Lightbox（整頁截圖可捲動）-->
 <div

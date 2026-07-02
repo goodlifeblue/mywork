@@ -1,0 +1,51 @@
+---
+const { url = '', height = 640, compact = false } = Astro.props;
+let iframeSrc = '';
+if (url) {
+  // If user passes an embed.figma.com proto URL, use it directly.
+  if (url.includes('embed.figma.com')) {
+    iframeSrc = url;
+  } else {
+    iframeSrc = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(url)}`;
+  }
+}
+---
+
+{compact ? (
+  url ? (
+    <div class="figma-embed rounded-xl overflow-hidden border border-slate-100 bg-white">
+      <iframe
+        src={iframeSrc}
+        class="w-full"
+        style={`height:${height}px; border:0;`}
+        allowfullscreen
+      />
+    </div>
+  ) : (
+    <div class="figma-embed-placeholder rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 text-slate-600 text-center">
+      尚未提供 Figma 分享連結。
+    </div>
+  )
+) : (
+  <section id="figma" class="mx-auto max-w-5xl px-6 pb-24">
+    <div class="mb-6">
+      <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">Design</span>
+      <h3 class="text-xl font-bold tracking-tight text-slate-900">Figma Prototype</h3>
+    </div>
+
+    {url ? (
+      <div class="figma-embed rounded-xl overflow-hidden border border-slate-100 bg-white">
+        <iframe
+          src={iframeSrc}
+          class="w-full"
+          style={`height:${height}px; border:0;`}
+          allowfullscreen
+        />
+      </div>
+    ) : (
+      <div class="figma-embed-placeholder rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 text-slate-600">
+        尚未提供 Figma 分享連結。要顯示嵌入，請在 `<FigmaEmbed url="https://www.figma.com/file/...." />` 設定分享網址。
+      </div>
+    )}
+  </section>
+)}
