@@ -5,7 +5,6 @@ const links = [
   { href: "#experience", label: "經歷" },
   { href: "#skills", label: "技能" },
   { href: "#strengths", label: "核心能力" },
-  { href: "#contact", label: "聯絡" },
 ];
 ---
 
@@ -17,6 +16,8 @@ const links = [
       <span class="inline-block h-3 w-3 rounded-full bg-brand-500"></span>
       My Portfolio
     </a>
+
+    <!-- 桌機導覽 -->
     <ul class="hidden items-center gap-6 text-sm font-medium text-slate-600 sm:flex">
       {
         links.map((link) => (
@@ -28,11 +29,71 @@ const links = [
         ))
       }
     </ul>
-    <a
-      href="mailto:goodlife.blue@gmail.com"
-      class="rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:hidden"
+
+    <!-- 手機漢堡按鈕 -->
+    <button
+      id="menu-toggle"
+      type="button"
+      aria-label="開啟選單"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-600 sm:hidden"
     >
-      聯絡
-    </a>
+      <!-- 漢堡圖示 -->
+      <svg id="menu-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-6 w-6">
+        <line x1="4" y1="7" x2="20" y2="7" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="17" x2="20" y2="17" />
+      </svg>
+      <!-- 關閉圖示 -->
+      <svg id="menu-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="hidden h-6 w-6">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
   </nav>
+
+  <!-- 手機下拉選單 -->
+  <div id="mobile-menu" class="hidden border-t border-slate-100 bg-white sm:hidden">
+    <ul class="mx-auto flex max-w-5xl flex-col px-6 py-2 text-base font-medium text-slate-700">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="mobile-link block rounded-lg px-2 py-3 transition-colors hover:bg-brand-50 hover:text-brand-600"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
+
+  function setOpen(open: boolean) {
+    if (!menu || !toggle) return;
+    menu.classList.toggle("hidden", !open);
+    iconOpen?.classList.toggle("hidden", open);
+    iconClose?.classList.toggle("hidden", !open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "關閉選單" : "開啟選單");
+  }
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    setOpen(!isOpen);
+  });
+
+  // 點選單連結後自動收合
+  document.querySelectorAll(".mobile-link").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+</script>

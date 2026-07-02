@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.1.0",
   "scripts": {
+    "predev": "kill -9 $(lsof -ti:4321) 2>/dev/null || true",
     "dev": "astro dev",
+    "stop": "kill -9 $(lsof -ti:4321) 2>/dev/null || true",
     "build": "astro build",
     "preview": "astro preview",
     "sync": "node scripts/sync-works.mjs",

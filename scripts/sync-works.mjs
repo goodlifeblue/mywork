@@ -110,8 +110,8 @@ function syncVideo() {
       "-c:v", "libx264", "-preset", "slow", "-crf", "24",
       "-pix_fmt", "yuv420p",
       "-vf", "scale='min(1080,iw)':-2",
+      "-c:a", "aac", "-b:a", "128k",
       "-movflags", "+faststart",
-      "-an",
       outVideo,
     ], { stdio: "ignore" });
     // 產生縮圖（第 0.5 秒）
