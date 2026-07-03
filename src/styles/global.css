@@ -42,10 +42,19 @@ body {
 }
 
 /* Figma embed styles */
-.figma-embed iframe {
+.figma-embed iframe,
+.figma-embed-iframe {
   display: block;
   width: 100%;
   height: 640px;
+}
+
+.figma-embed-wrapper {
+  position: relative;
+}
+
+.figma-embed-overlay {
+  cursor: pointer;
 }
 
 .figma-embed-placeholder {

@@ -2,7 +2,6 @@
 const { url = '', height = 640, compact = false } = Astro.props;
 let iframeSrc = '';
 if (url) {
-  // If user passes an embed.figma.com proto URL, use it directly.
   if (url.includes('embed.figma.com')) {
     iframeSrc = url;
   } else {
@@ -13,13 +12,21 @@ if (url) {
 
 {compact ? (
   url ? (
-    <div class="figma-embed rounded-xl overflow-hidden border border-slate-100 bg-white">
+    <div class="figma-embed-wrapper relative rounded-2xl overflow-hidden border border-slate-100 bg-white shadow-sm">
       <iframe
         src={iframeSrc}
-        class="w-full"
+        class="figma-embed-iframe w-full"
         style={`height:${height}px; border:0;`}
         allowfullscreen
       />
+      <button
+        type="button"
+        class="figma-embed-overlay absolute inset-0 hidden flex-col items-center justify-center gap-2 bg-transparent text-white backdrop-blur-sm"
+      >
+        <span class="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em]">
+          點擊啟用 Figma
+        </span>
+      </button>
     </div>
   ) : (
     <div class="figma-embed-placeholder rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 text-slate-600 text-center">
@@ -34,18 +41,54 @@ if (url) {
     </div>
 
     {url ? (
-      <div class="figma-embed rounded-xl overflow-hidden border border-slate-100 bg-white">
+      <div class="figma-embed-wrapper relative rounded-2xl overflow-hidden border border-slate-100 bg-white shadow-sm">
         <iframe
           src={iframeSrc}
-          class="w-full"
+          class="figma-embed-iframe w-full"
           style={`height:${height}px; border:0;`}
           allowfullscreen
         />
+        <button
+          type="button"
+          class="figma-embed-overlay absolute inset-0 hidden flex-col items-center justify-center gap-2 bg-transparent text-white backdrop-blur-sm"
+        >
+          <span class="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em]">
+            點擊啟用 Figma
+          </span>
+        </button>
       </div>
     ) : (
       <div class="figma-embed-placeholder rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 text-slate-600">
-        尚未提供 Figma 分享連結。要顯示嵌入，請在 `<FigmaEmbed url="https://www.figma.com/file/...." />` 設定分享網址。
+        尚未提供 Figma 分享連結。要顯示 Figma 嵌入，請在 `<FigmaEmbed url="https://www.figma.com/file/...." />` 設定分享網址。
       </div>
     )}
   </section>
 )}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.figma-embed-wrapper').forEach((wrapper) => {
+      const iframe = wrapper.querySelector('iframe');
+      const overlay = wrapper.querySelector('.figma-embed-overlay');
+      if (!iframe || !overlay) return;
+
+      const enableIframe = () => {
+        overlay.classList.add('hidden');
+        iframe.style.pointerEvents = 'auto';
+      };
+
+      if (window.innerWidth < 640) {
+        overlay.classList.remove('hidden');
+        iframe.style.pointerEvents = 'none';
+        overlay.addEventListener('click', enableIframe);
+        overlay.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            enableIframe();
+          }
+        });
+      } else {
+        iframe.style.pointerEvents = 'auto';
+      }
+    });
+  });
+</script>
