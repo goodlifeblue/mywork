@@ -1,10 +1,6 @@
 ---
 // 個人介紹區
 const roles = ["Senior Product Designer", "Design Lead", "UI/UX Designer"];
-const meta = [
-  { icon: "📍", label: "台中市" },
-  { icon: "📧", label: "goodlife.blue@gmail.com", href: "mailto:goodlife.blue@gmail.com" },
-];
 
 // 金銀圓球：從照片中心噴出散開（twinkle = 閃爍發光）
 const balls = [
@@ -83,24 +79,6 @@ const balls = [
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
-          {
-            meta.map((m) =>
-              m.href ? (
-                <a href={m.href} class="flex items-center gap-1.5 transition-colors hover:text-brand-600">
-                  <span>{m.icon}</span>
-                  {m.label}
-                </a>
-              ) : (
-                <span class="flex items-center gap-1.5">
-                  <span>{m.icon}</span>
-                  {m.label}
-                </span>
-              )
-            )
-          }
-        </div>
-
         <div class="flex flex-wrap gap-3 pt-2">
           <a
             href="#portfolio"
@@ -166,6 +144,13 @@ const balls = [
             height="230"
             class="relative h-[230px] w-[230px] rounded-full object-cover object-top shadow-xl ring-4 ring-white"
           />
+          <!-- 年資標籤 -->
+          <div
+            class="absolute bottom-2 right-2 z-10 flex flex-col items-center rounded-full bg-white px-3 py-2 shadow-lg ring-1 ring-slate-100"
+          >
+            <span class="text-lg font-extrabold leading-none text-brand-600">10+</span>
+            <span class="mt-0.5 text-[10px] font-medium leading-none text-slate-500">年經驗</span>
+          </div>
         </div>
       </div>
     </div>
