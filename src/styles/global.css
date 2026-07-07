@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
-/* 綠 + 白 主題色 —— 乾淨、清爽 */
+/* 香檳金 + 暖灰 主題色 —— 質感、沉穩 */
 @theme {
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  --color-brand-50: #faf8f3;
+  --color-brand-100: #f3eee1;
+  --color-brand-200: #e6d9bd;
+  --color-brand-300: #d5c095;
+  --color-brand-400: #c3a76f;
+  --color-brand-500: #b08f52;
+  --color-brand-600: #9a7942;
+  --color-brand-700: #7d6136;
+  --color-brand-800: #66502c;
+  --color-brand-900: #544224;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
     "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;

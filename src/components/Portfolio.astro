@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import FigmaEmbed from "./FigmaEmbed.astro";
 
 // 自動抓取 src/assets/works/ 底下三個資料夾的所有檔案
 // 之後只要把新檔案丟進對應資料夾，作品集就會自動顯示，不需修改程式碼。
@@ -43,6 +42,13 @@ const videos = videoFiles.map((v, i) => ({
   ...v,
   poster: posterFiles[i]?.src,
 }));
+
+// Figma prototype 輪播清單
+const figmaPrototypes = [
+  "https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&hide-ui=1&embed-host=share",
+  "https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&hide-ui=1&embed-host=share",
+  "https://embed.figma.com/proto/kcTH8v03htyMjG1GmFElcK/%E8%A8%AD%E8%A8%88%E4%B8%AD--Copy-?node-id=33443-321&viewport=422%2C114%2C1.14&scaling=scale-down-width&content-scaling=fixed&page-id=33443%3A320&hide-ui=1&embed-host=share",
+];
 
 // 圖片類別（網頁、Logo）
 const imageCategories = [
@@ -222,10 +228,55 @@ const imageCategories = [
                   <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <FigmaEmbed compact url="https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&embed-host=share" height={450} />
-                  <FigmaEmbed compact url="https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&embed-host=share" height={450} />
-                  <FigmaEmbed compact url="https://embed.figma.com/proto/kcTH8v03htyMjG1GmFElcK/%E8%A8%AD%E8%A8%88%E4%B8%AD--Copy-?node-id=33443-321&viewport=422%2C114%2C1.14&scaling=min-zoom&content-scaling=fixed&page-id=33443%3A320&embed-host=share" height={450} />
+                <div class="figma-phone-carousel flex flex-col items-center gap-6">
+                  <div class="relative w-[300px] sm:w-[340px]">
+                    <div class="relative rounded-[2.75rem] border-[10px] border-slate-900 bg-slate-900 shadow-2xl shadow-slate-900/30">
+                      <div class="relative h-[528px] overflow-hidden rounded-[2rem] bg-white sm:h-[613px]">
+                        {figmaPrototypes.map((src, i) => (
+                          <iframe
+                            src={src}
+                            title={`Figma Prototype ${i + 1}`}
+                            class={`figma-slide absolute inset-0 h-full w-full transition-opacity duration-300 ${i === 0 ? "opacity-100" : "pointer-events-none opacity-0"}`}
+                            style="border:0;"
+                            allowfullscreen
+                          />
+                        ))}
+                        <div class="figma-loading pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-white/90 opacity-0 transition-opacity duration-300">
+                          <div class="flex flex-col items-center gap-3">
+                            <span class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-500"></span>
+                            <span class="text-xs font-medium tracking-wider text-slate-400">Loading…</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-5">
+                    <button
+                      type="button"
+                      class="figma-carousel-prev flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
+                      aria-label="上一個 Prototype"
+                    >
+                      ←
+                    </button>
+                    <div class="flex items-center gap-2">
+                      {figmaPrototypes.map((_, i) => (
+                        <button
+                          type="button"
+                          class={`figma-carousel-dot h-2.5 w-2.5 rounded-full transition-colors ${i === 0 ? "bg-brand-500" : "bg-slate-200 hover:bg-slate-300"}`}
+                          data-index={i}
+                          aria-label={`切換到 Prototype ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      class="figma-carousel-next flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
+                      aria-label="下一個 Prototype"
+                    >
+                      →
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
@@ -499,6 +550,88 @@ const imageCategories = [
 
     updateMainImage(0);
     startAutoplay();
+  }
+
+  // Figma 手機輪播
+  const figmaCarousel = document.querySelector('.figma-phone-carousel');
+  if (figmaCarousel) {
+    const slides = figmaCarousel.querySelectorAll<HTMLIFrameElement>('.figma-slide');
+    const dots = figmaCarousel.querySelectorAll<HTMLButtonElement>('.figma-carousel-dot');
+    const loadingOverlay = figmaCarousel.querySelector('.figma-loading');
+    const slideLoaded = new Array(slides.length).fill(false);
+    let figmaIndex = 0;
+    let loadingHideTimer: number | undefined;
+
+    function setLoading(visible: boolean) {
+      loadingOverlay?.classList.toggle('opacity-0', !visible);
+      loadingOverlay?.classList.toggle('opacity-100', visible);
+    }
+
+    slides.forEach((slide, i) => {
+      slide.addEventListener('load', () => {
+        slideLoaded[i] = true;
+        if (i === figmaIndex) setLoading(false);
+      });
+    });
+
+    // 首個 prototype 載入前先顯示 loading
+    if (!slideLoaded[0]) setLoading(true);
+
+    function showFigmaSlide(index: number) {
+      figmaIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('opacity-100', i === figmaIndex);
+        slide.classList.toggle('opacity-0', i !== figmaIndex);
+        slide.classList.toggle('pointer-events-none', i !== figmaIndex);
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-brand-500', i === figmaIndex);
+        dot.classList.toggle('bg-slate-200', i !== figmaIndex);
+      });
+
+      // 切換時顯示 loading：已載入的短暫過場，未載入的等 load 事件
+      clearTimeout(loadingHideTimer);
+      setLoading(true);
+      if (slideLoaded[figmaIndex]) {
+        loadingHideTimer = window.setTimeout(() => setLoading(false), 400);
+      }
+    }
+
+    // 自動輪播：8 秒切換，滑鼠移入（操作 prototype）時暫停
+    let figmaAutoplayTimer: number | undefined;
+    let figmaHovered = false;
+
+    function startFigmaAutoplay() {
+      clearInterval(figmaAutoplayTimer);
+      figmaAutoplayTimer = window.setInterval(() => {
+        if (figmaHovered) return;
+        showFigmaSlide(figmaIndex + 1);
+      }, 8000);
+    }
+
+    figmaCarousel.addEventListener('mouseenter', () => {
+      figmaHovered = true;
+    });
+    figmaCarousel.addEventListener('mouseleave', () => {
+      figmaHovered = false;
+    });
+
+    figmaCarousel.querySelector('.figma-carousel-prev')?.addEventListener('click', () => {
+      showFigmaSlide(figmaIndex - 1);
+      startFigmaAutoplay();
+    });
+    figmaCarousel.querySelector('.figma-carousel-next')?.addEventListener('click', () => {
+      showFigmaSlide(figmaIndex + 1);
+      startFigmaAutoplay();
+    });
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        showFigmaSlide(Number(dot.dataset.index || 0));
+        startFigmaAutoplay();
+      });
+    });
+
+    startFigmaAutoplay();
   }
 
   // 影片燈箱
