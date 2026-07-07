@@ -68,7 +68,7 @@ const imageCategories = [
 ];
 ---
 
-<section id="portfolio" class="mx-auto max-w-5xl px-6 pt-12 pb-24">
+<section id="portfolio" class="mx-auto max-w-[1220px] px-6 pt-12 pb-24">
   <div class="mb-12 flex flex-col gap-3">
     <span class="text-sm font-semibold uppercase tracking-wider text-brand-600">
       Portfolio
@@ -103,50 +103,111 @@ const imageCategories = [
             <p class="max-w-md text-sm text-slate-500">{cat.desc}</p>
           </div>
 
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {cat.items.map((item, i) => (
-              <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
-                {cat.zoomable ? (
-                  <button
-                    type="button"
-                    class="image-trigger group/img relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100"
-                    data-image={item.src.src}
-                    aria-label={`放大檢視 ${cat.title} ${i + 1}`}
-                  >
-                    <Image
-                      src={item.src}
-                      alt={`${cat.title} ${i + 1}`}
-                      loading="lazy"
-                      class="h-full w-full object-cover object-top transition-transform duration-500 group-hover/img:object-bottom"
-                    />
-                    <span class="absolute inset-0 bg-slate-900/0 transition-colors group-hover/img:bg-slate-900/20" />
-                    <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
-                      ⛶ 點擊放大
-                    </span>
-                  </button>
-                ) : (
-                  <div class="relative block aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
-                    <Image
-                      src={item.src}
-                      alt={`${cat.title} ${i + 1}`}
-                      loading="lazy"
-                      class="h-full w-full object-contain p-4"
-                    />
+          {cat.id === 'logo' ? (
+            <div class="logo-gallery rounded-3xl border border-slate-100 bg-white p-4 shadow-sm sm:p-6">
+              <div class="hidden gap-6 lg:grid lg:grid-cols-[1.1fr_0.9fr]">
+                <div class="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand-50 to-white p-0">
+                  <div class="flex flex-col gap-0">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white">
+                      <img
+                        src={cat.items[0]?.src?.src || ""}
+                        alt={`${cat.title} 01`}
+                        class="logo-main-image h-full w-full object-contain transition-all duration-500"
+                      />
+                    </div>
                   </div>
-                )}
-                <div class="flex items-center justify-between gap-2 p-4">
-                  <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
-                    {cat.title} {String(i + 1).padStart(2, "0")}
-                  </h4>
-                  {cat.subtitle ? (
-                    <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
-                      {cat.subtitle}
-                    </span>
-                  ) : null}
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                  {cat.items.map((item, i) => (
+                    <button
+                      type="button"
+                      class="logo-thumb group relative aspect-[4/3] w-[calc((100%-1.5rem)/3)] overflow-hidden rounded-xl border-2 border-transparent bg-white p-3 shadow-sm ring-1 ring-slate-100 transition-all hover:ring-brand-200"
+                      data-index={i}
+                      data-title={`${cat.title} ${String(i + 1).padStart(2, "0")}`}
+                      data-src={item.src.src}
+                      aria-label={`顯示 ${cat.title} ${String(i + 1).padStart(2, "0")}`}
+                    >
+                      <img
+                        src={item.src.src}
+                        alt={`${cat.title} ${i + 1}`}
+                        loading="lazy"
+                        class="h-full w-full object-contain object-center transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </button>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div class="grid gap-6 sm:grid-cols-2 lg:hidden">
+                {cat.items.map((item, i) => (
+                  <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
+                    <div class="relative block aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
+                      <Image
+                        src={item.src}
+                        alt={`${cat.title} ${i + 1}`}
+                        loading="lazy"
+                        class="h-full w-full object-contain p-4"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between gap-2 p-4">
+                      <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
+                        {cat.title} {String(i + 1).padStart(2, "0")}
+                      </h4>
+                      <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                        {cat.subtitle}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {cat.items.map((item, i) => (
+                <div class="group overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/50">
+                  {cat.zoomable ? (
+                    <button
+                      type="button"
+                      class="image-trigger group/img relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100"
+                      data-image={item.src.src}
+                      aria-label={`放大檢視 ${cat.title} ${i + 1}`}
+                    >
+                      <Image
+                        src={item.src}
+                        alt={`${cat.title} ${i + 1}`}
+                        loading="lazy"
+                        class="h-full w-full object-cover object-top transition-transform duration-500 group-hover/img:object-bottom"
+                      />
+                      <span class="absolute inset-0 bg-slate-900/0 transition-colors group-hover/img:bg-slate-900/20" />
+                      <span class="absolute right-2 top-2 rounded-md bg-slate-900/60 px-1.5 py-0.5 text-xs font-medium text-white">
+                        ⛶ 點擊放大
+                      </span>
+                    </button>
+                  ) : (
+                    <div class="relative block aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand-50 to-brand-100">
+                      <Image
+                        src={item.src}
+                        alt={`${cat.title} ${i + 1}`}
+                        loading="lazy"
+                        class="h-full w-full object-contain p-4"
+                      />
+                    </div>
+                  )}
+                  <div class="flex items-center justify-between gap-2 p-4">
+                    <h4 class="text-sm font-semibold text-slate-900 transition-colors group-hover:text-brand-600">
+                      {cat.title} {String(i + 1).padStart(2, "0")}
+                    </h4>
+                    {cat.subtitle ? (
+                      <span class="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                        {cat.subtitle}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {cat.id === 'web' && (
             <>
               <div id="figma">
@@ -161,9 +222,10 @@ const imageCategories = [
                   <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   <FigmaEmbed compact url="https://embed.figma.com/proto/gTkN7pHX1zH2b8hTuLBfxD/SPORT?node-id=4425-18305&viewport=167%2C121%2C0.5&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4425%3A18305&page-id=4425%3A18303&embed-host=share" height={450} />
                   <FigmaEmbed compact url="https://embed.figma.com/proto/0MVNyt8rQYXf3vqhoBrHBp/E-UI-Labiry?node-id=350-513&viewport=928%2C-1103%2C0.25&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=436%3A2618&page-id=346%3A384&embed-host=share" height={450} />
+                  <FigmaEmbed compact url="https://embed.figma.com/proto/kcTH8v03htyMjG1GmFElcK/%E8%A8%AD%E8%A8%88%E4%B8%AD--Copy-?node-id=33443-321&viewport=422%2C114%2C1.14&scaling=min-zoom&content-scaling=fixed&page-id=33443%3A320&embed-host=share" height={450} />
                 </div>
               </div>
             </>
@@ -243,7 +305,7 @@ const imageCategories = [
   class="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 hidden sm:hidden"
   style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
 >
-  <div class="mx-auto flex max-w-5xl items-center justify-between gap-2 rounded-3xl border border-white/20 bg-brand-500/50 px-3 py-3 text-white shadow-2xl shadow-slate-900/10 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-[1220px] items-center justify-between gap-2 rounded-3xl border border-white/20 bg-brand-500/50 px-3 py-3 text-white shadow-2xl shadow-slate-900/10 backdrop-blur-sm">
     <button
       type="button"
       data-target="web"
@@ -379,6 +441,66 @@ const imageCategories = [
 </div>
 
 <script>
+  const logoGallery = document.querySelector('.logo-gallery');
+  const logoMainImage = document.querySelector('.logo-main-image') as HTMLImageElement | null;
+  const logoMainTitle = document.querySelector('.logo-main-title');
+  const logoThumbs = document.querySelectorAll<HTMLButtonElement>('.logo-thumb');
+
+  if (logoGallery && logoMainImage) {
+    const images = Array.from(logoThumbs).map((thumb) => ({
+      src: thumb.dataset.src || '',
+      title: thumb.dataset.title || 'Logo',
+    }));
+
+    let currentIndex = 0;
+    let autoplayTimer: number | undefined;
+    let isHovered = false;
+
+    function updateMainImage(index: number) {
+      const item = images[index];
+      if (!item) return;
+      logoMainImage.src = item.src;
+      logoMainImage.alt = item.title;
+      if (logoMainTitle) logoMainTitle.textContent = item.title;
+      currentIndex = index;
+      logoThumbs.forEach((thumb, thumbIndex) => {
+        thumb.classList.toggle('border-brand-500', thumbIndex === index);
+        thumb.classList.toggle('shadow-md', thumbIndex === index);
+      });
+    }
+
+    function startAutoplay() {
+      if (images.length <= 1) return;
+      clearInterval(autoplayTimer);
+      autoplayTimer = window.setInterval(() => {
+        if (isHovered) return;
+        const nextIndex = (currentIndex + 1) % images.length;
+        updateMainImage(nextIndex);
+      }, 2500);
+    }
+
+    logoThumbs.forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        const index = Number(thumb.dataset.index || 0);
+        updateMainImage(index);
+        startAutoplay();
+      });
+    });
+
+    logoGallery.addEventListener('mouseenter', () => {
+      isHovered = true;
+      clearInterval(autoplayTimer);
+    });
+
+    logoGallery.addEventListener('mouseleave', () => {
+      isHovered = false;
+      startAutoplay();
+    });
+
+    updateMainImage(0);
+    startAutoplay();
+  }
+
   // 影片燈箱
   const lightbox = document.getElementById("video-lightbox");
   const player = document.getElementById("video-lightbox-player") as HTMLVideoElement | null;
