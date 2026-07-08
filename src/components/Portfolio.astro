@@ -252,11 +252,20 @@ const imageCategories = [
                           <iframe
                             src={src}
                             title={`Figma Prototype ${i + 1}`}
+                            loading="lazy"
                             class={`figma-slide absolute inset-0 h-full w-full transition-opacity duration-300 ${i === 0 ? "opacity-100" : "pointer-events-none opacity-0"}`}
                             style="border:0;"
                             allowfullscreen
                           />
                         ))}
+                        <button
+                          type="button"
+                          class="figma-touch-guard absolute inset-0 z-20 hidden items-end justify-center bg-transparent pb-6"
+                        >
+                          <span class="rounded-full bg-slate-900/70 px-4 py-2 text-xs font-medium tracking-wider text-white shadow-lg backdrop-blur-sm">
+                            點擊啟用操作
+                          </span>
+                        </button>
                         <div class="figma-loading pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-white/90 opacity-0 transition-opacity duration-300">
                           <div class="flex flex-col items-center gap-3">
                             <span class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-500"></span>
@@ -650,6 +659,17 @@ const imageCategories = [
     });
 
     startFigmaAutoplay();
+
+    // 手機：預設擋住 iframe 觸控，避免捲動被 prototype 攔截；點一下才啟用操作
+    const touchGuard = figmaCarousel.querySelector<HTMLButtonElement>('.figma-touch-guard');
+    if (touchGuard && window.innerWidth < 640) {
+      touchGuard.classList.remove('hidden');
+      touchGuard.classList.add('flex');
+      touchGuard.addEventListener('click', () => {
+        touchGuard.classList.add('hidden');
+        touchGuard.classList.remove('flex');
+      });
+    }
   }
 
   // 影片燈箱

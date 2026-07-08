@@ -100,6 +100,15 @@ const particles = [
   </svg>
 </div>
 
+<script>
+  // 手機停用 SVG SMIL 漸層流光動畫（CSS 管不到），降低耗能
+  if (window.matchMedia('(max-width: 640px)').matches) {
+    document.querySelectorAll<SVGSVGElement>('.gold-waves svg').forEach((svg) => {
+      svg.pauseAnimations();
+    });
+  }
+</script>
+
 <style>
   /* 緩慢飄移 + 輕微搖擺，兩組相位錯開 */
   .wave-drift-a {
@@ -150,6 +159,19 @@ const particles = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .wave-drift-a,
+    .wave-drift-b,
+    .gold-particle {
+      animation: none;
+    }
+  }
+
+  /* 手機：改為靜態絕對定位（只鋪首屏），停用動畫，避免捲動重繪造成卡頓 */
+  @media (max-width: 640px) {
+    .gold-waves {
+      position: absolute;
+      height: 100vh;
+    }
     .wave-drift-a,
     .wave-drift-b,
     .gold-particle {
