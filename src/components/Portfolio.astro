@@ -50,6 +50,18 @@ const figmaPrototypes = [
   "https://embed.figma.com/proto/kcTH8v03htyMjG1GmFElcK/%E8%A8%AD%E8%A8%88%E4%B8%AD--Copy-?node-id=33443-321&viewport=422%2C114%2C1.14&scaling=scale-down-width&content-scaling=fixed&page-id=33443%3A320&hide-ui=1&embed-host=share",
 ];
 
+// 手機版：以截圖呈現（figma01.jpg ↔ 第 1 個 prototype），點擊另開 Figma
+const figmaImages = toSorted(
+  import.meta.glob("../assets/works/figma/*.{jpg,jpeg,png}", {
+    eager: true,
+    import: "default",
+  })
+);
+const figmaMobileItems = figmaPrototypes.map((url, i) => ({
+  link: url.replace("embed.figma.com", "www.figma.com"),
+  img: figmaImages[i]?.src,
+}));
+
 // 圖片類別（網頁、Logo）
 const imageCategories = [
   {
@@ -244,7 +256,31 @@ const imageCategories = [
                   <p class="max-w-md text-sm text-slate-500">Figma prototype 與設計連結展示。</p>
                 </div>
 
-                <div class="figma-phone-carousel flex flex-col items-center gap-6">
+                <!-- 手機版：截圖 + 另開 Figma 連結 -->
+                <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 sm:hidden">
+                  {figmaMobileItems.map((f, i) => (
+                    <a
+                      href={f.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="relative w-[230px] shrink-0 snap-center overflow-hidden rounded-[1.75rem] border-8 border-slate-900 bg-slate-900 shadow-xl shadow-slate-900/20"
+                    >
+                      {f.img ? (
+                        <Image
+                          src={f.img}
+                          alt={`Figma Prototype ${i + 1}`}
+                          loading="lazy"
+                          class="block w-full rounded-[1.25rem]"
+                        />
+                      ) : null}
+                      <span class="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-900/75 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+                        在 Figma 開啟 ↗
+                      </span>
+                    </a>
+                  ))}
+                </div>
+
+                <div class="figma-phone-carousel hidden flex-col items-center gap-6 sm:flex">
                   <div class="relative w-[300px] sm:w-[340px]">
                     <div class="relative rounded-[2.75rem] border-[10px] border-slate-900 bg-slate-900 shadow-2xl shadow-slate-900/30">
                       <div class="relative h-[528px] overflow-hidden rounded-[2rem] bg-white sm:h-[613px]">
@@ -258,14 +294,6 @@ const imageCategories = [
                             allowfullscreen
                           />
                         ))}
-                        <button
-                          type="button"
-                          class="figma-touch-guard absolute inset-0 z-20 hidden items-end justify-center bg-transparent pb-6"
-                        >
-                          <span class="rounded-full bg-slate-900/70 px-4 py-2 text-xs font-medium tracking-wider text-white shadow-lg backdrop-blur-sm">
-                            點擊啟用操作
-                          </span>
-                        </button>
                         <div class="figma-loading pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-white/90 opacity-0 transition-opacity duration-300">
                           <div class="flex flex-col items-center gap-3">
                             <span class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-500"></span>
@@ -659,17 +687,6 @@ const imageCategories = [
     });
 
     startFigmaAutoplay();
-
-    // 手機：預設擋住 iframe 觸控，避免捲動被 prototype 攔截；點一下才啟用操作
-    const touchGuard = figmaCarousel.querySelector<HTMLButtonElement>('.figma-touch-guard');
-    if (touchGuard && window.innerWidth < 640) {
-      touchGuard.classList.remove('hidden');
-      touchGuard.classList.add('flex');
-      touchGuard.addEventListener('click', () => {
-        touchGuard.classList.add('hidden');
-        touchGuard.classList.remove('flex');
-      });
-    }
   }
 
   // 影片燈箱
